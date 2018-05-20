@@ -177,7 +177,7 @@ namespace SUser
         }
         private static string Random(int length)
         {
-            const string pool = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890+-*/~!@#$%&*();:'""\|<>,./?";
+            const string pool = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/~!@#$%&*();:'""\|<>,./?";
             var builder = new StringBuilder();
             Random random = new Random();
             for (var i = 0; i < length; i++)
