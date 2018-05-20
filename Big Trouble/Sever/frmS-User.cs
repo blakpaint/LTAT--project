@@ -20,7 +20,6 @@ namespace SUser
     public partial class SUser : Form
     {
         BigInteger P, G, x, a, y, ka;
-        AesCryptoServiceProvider aes = new AesCryptoServiceProvider();
         AES_Enc enc = new AES_Enc();
         string adding;
 

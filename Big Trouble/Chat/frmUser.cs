@@ -24,14 +24,11 @@ namespace User
         private System.Windows.Forms.Timer timer;
         BigInteger P, G, x, a, y, ka;
         string adding;
-        AesCryptoServiceProvider aes = new AesCryptoServiceProvider();
         AES_Enc enc = new AES_Enc();
         public frmUser()
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
-
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -172,40 +169,6 @@ namespace User
             }
             else
                 tbKey.Visible = false;
-
-        }
-
-
-        //Encrypt
-        private static string Random(int length)
-        {
-            const string pool = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/~!@#$%&*();:'""\|<>,./?";
-            var builder = new StringBuilder();
-            Random random = new Random();
-            for (var i = 0; i < length; i++)
-            {
-                var c = pool[random.Next(0, pool.Length)];
-                builder.Append(c);
-            }
-
-            return builder.ToString();
-        }
-        private string getHashSha256(string text)
-        {
-            byte[] bytes = Encoding.Unicode.GetBytes(text);
-            SHA256Managed hashstring = new SHA256Managed();
-            byte[] hash = hashstring.ComputeHash(bytes);
-            string hashString = string.Empty;
-            foreach (byte x in hash)
-            {
-                hashString += String.Format("{0:X2}", x);
-            }
-            return hashString;
-        }
-        private string Get_Day()
-        {
-            string str = DateTime.Now.ToString("yyyymmddhhmmss").Trim();
-            return str;
         }
 
         private static string ToHexString(string asciiString)
@@ -240,24 +203,42 @@ namespace User
                 }
         }
 
-        //Thay đổi P sau 15'
-        //P được gửi kèm 1 chuỗi random(chữ hoặc kí tự đặc biệt)
-        //b sau khi nhận sẽ tách lấy số và gán vào P
-        private void MainTimer_Tick(object sender, EventArgs e)
+        //Encrypt
+        private static string Random(int length)
         {
-            MainTimer.Stop();
-            BigInteger p = new BigInteger(rand.Next(1000 * 50, 9999 * 50));
-            P = p;
-            string tmp = p.ToString();
-            string txt = tmp.Insert(rand.Next(0, tmp.Length +1), Random(7));
-            client.Send(Encoding.ASCII.GetBytes("<>|" + txt + "|"));
-            MessageBox.Show("Update !");
-            MainTimer.Start();
+            const string pool = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*/~!@#$%&*();:'""\|<>,./?";
+            var builder = new StringBuilder();
+            Random random = new Random();
+            for (var i = 0; i < length; i++)
+            {
+                var c = pool[random.Next(0, pool.Length)];
+                builder.Append(c);
+            }
+
+            return builder.ToString();
         }
+        private string getHashSha256(string text)
+        {
+            byte[] bytes = Encoding.Unicode.GetBytes(text);
+            SHA256Managed hashstring = new SHA256Managed();
+            byte[] hash = hashstring.ComputeHash(bytes);
+            string hashString = string.Empty;
+            foreach (byte x in hash)
+            {
+                hashString += String.Format("{0:X2}", x);
+            }
+            return hashString;
+        }
+        private string Get_Day()
+        {
+            string str = DateTime.Now.ToString("yyyymmddhhmmss").Trim();
+            return str;
+        }
+
 
         private void txtInput_Click(object sender, EventArgs e)
         {
-            if(txtInput.Text == "Say something...")
+            if (txtInput.Text == "Say something...")
             {
                 txtInput.Text = "";
                 txtInput.ForeColor = Color.Black;
@@ -293,8 +274,23 @@ namespace User
             return txt;
         }
 
-
         //Diffie Hellman
+
+        //Thay đổi P sau 15'
+        //P được gửi kèm 1 chuỗi random(chữ hoặc kí tự đặc biệt)
+        //b sau khi nhận sẽ tách lấy số và gán vào P
+        private void MainTimer_Tick(object sender, EventArgs e)
+        {
+            MainTimer.Stop();
+            BigInteger p = new BigInteger(rand.Next(1000 * 50, 9999 * 50));
+            P = p;
+            string tmp = p.ToString();
+            string txt = tmp.Insert(rand.Next(0, tmp.Length + 1), Random(7));
+            client.Send(Encoding.ASCII.GetBytes("<>|" + txt + "|"));
+            MessageBox.Show("Update !");
+            MainTimer.Start();
+        }
+
         Random rand = new Random();
 
         BigInteger power(BigInteger a, BigInteger b, BigInteger P)
